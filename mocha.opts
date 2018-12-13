@@ -1,0 +1,5 @@
+--require esm
+--require ./tests/test-helpers.js
+--ui bdd
+--slow
+--allow-uncaught
