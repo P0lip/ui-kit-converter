@@ -1,7 +1,7 @@
 import chai from 'chai';
 import transform from '../src/ast/transform';
 
-require('it-each')();
+require('it-each')({ testPerIteration: true });
 
 const { expect } = chai;
 

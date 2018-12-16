@@ -13,15 +13,15 @@ export default async ({ cwd, ignore, pattern, transform }) => {
   await Promise.all(
     files.map(async file => {
       const code = await fs.readFile(file, 'utf-8');
-      let transfomed = null;
+      let output = '';
       try {
-        transfomed = transform(code);
+        output = transform(code);
       } catch (ex) {
         console.error(file, ex);
       }
 
-      if (transfomed !== null) {
-        await fs.writeFile(file, transfomed);
+      if (output !== '') {
+        await fs.writeFile(file, output);
       }
     }),
   );

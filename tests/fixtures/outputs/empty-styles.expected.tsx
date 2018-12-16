@@ -1,1 +1,1 @@
-<article style={{}} />;
+<article />;

@@ -1,86 +1,47 @@
 import { SUPPORTED_RULES } from './consts';
 
+export const selectorDelimiter = /\s*,\s*/;
+
 export function getCSSRuleName(rule) {
   if (/padding|margin/.test(rule)) {
     return rule.replace(/(m|p)(?:argin|adding)(.)?/, '$1$2').toLowerCase();
   }
 
-  return rule.replace(/-(.)/, (_, l) => l.toUpperCase());
+  return rule.replace(/-(.)/g, (_, l) => l.toUpperCase());
 }
 
 export const isSupportedCSSRule = rule => SUPPORTED_RULES.has(rule);
 
-export function collectStyles(node) {
-  if (node === void 0 || node.type !== 'ObjectExpression') {
-    return null;
-  }
+export const isIntrinsicElement = name =>
+  name !== void 0 && /^[a-z]/.test(name);
 
-  const props = [];
-  const styles = {
-    meta: {
-      isEmpty: false,
-      isFlex: false,
-    },
-    props,
-  };
-
-  let { length: i } = node.properties;
-  while (i) {
-    i -= 1;
-    const prop = node.properties[i];
-
-    if (prop.type === 'SpreadElement') {
-      // fixme: provide better support for it
-      continue;
-    }
-
-    if (prop.computed) {
-      continue;
-    }
-
-    const { value } = prop;
-
-    const name = getCSSRuleName(
-      prop.key.type === 'StringLiteral' ? prop.key.value : prop.key.name,
-    );
-
-    if (isSupportedCSSRule(name)) {
-      if (
-        name === 'display' &&
-        value.type === 'StringLiteral' &&
-        value.value === 'flex'
-      ) {
-        styles.meta.isFlex = true;
-      } else {
-        props.push([name, value]);
-      }
-
-      node.properties.splice(i, 1);
-    }
-  }
-
-  styles.meta.isEmpty = node.properties.length === 0;
-  return styles;
-}
-
-export function determineProperComponent(tagName, meta) {
+export function determineUIKitComponent(tagName, meta) {
   let baseComponent = 'Box';
   let as = null;
 
   if (meta.isFlex) {
     baseComponent = 'Flex';
-  } else if (tagName === 'button') {
-    baseComponent = 'Button';
   }
 
   switch (tagName) {
     case 'div':
       break;
-    case 'button':
-      if (baseComponent === 'Button') {
-        break;
+    case 'a':
+      if (baseComponent === 'Flex') {
+        as = 'Link';
+      } else {
+        baseComponent = 'Link';
       }
-    // eslint-disable-next-line no-fallthrough
+
+      break;
+    case 'button':
+      if (baseComponent === 'Flex') {
+        as = 'Button';
+      } else {
+        baseComponent = 'Button';
+      }
+
+      break;
     default:
       as = tagName;
   }

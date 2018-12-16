@@ -1,5 +1,7 @@
 --require esm
 --require ./tests/test-helpers.js
+--require core-js/fn/array/flat-map
+--require object.fromentries/auto
 --ui bdd
 --slow
 --allow-uncaught

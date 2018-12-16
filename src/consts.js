@@ -1,10 +1,11 @@
 export const SUPPORTED_RULES = new Set([
   'borderRadius',
-  'border',
-  'borderTop',
-  'borderBottom',
-  'borderLeft',
-  'borderRight',
+  ...['', 'Top', 'Bottom', 'Right', 'Left'].flatMap(corner => [
+    `border${corner}`,
+    `border${corner}Color`,
+    `border${corner}Width`,
+    `border${corner}Style`,
+  ]),
   'boxShadow',
   'flex',
   'alignSelf',
@@ -14,6 +15,7 @@ export const SUPPORTED_RULES = new Set([
   'fontWeight',
   'fontStyle',
   'letterSpacing',
+  'cursor',
   'display',
   'height',
   'minHeight',
@@ -57,4 +59,6 @@ export const SUPPORTED_RULES = new Set([
   'alignItems',
 ]);
 
-export const UI_KIT_NAME = '@stoplight/ui-kit';
+export const PRAGMA_VALUE = 'jsx';
+export const UI_KIT_SOURCE_NAME = '@stoplight/ui-kit';
+export const EMOTION_SOURCE_NAME = '@emotion/core';

@@ -6,7 +6,8 @@
         "targets": {
           "node": "8"
         },
-        "modules": false
+        "modules": false,
+        "useBuiltIns": "usage"
       }
     ]
   ],

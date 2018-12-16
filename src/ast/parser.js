@@ -1,10 +1,20 @@
 import * as parser from '@babel/parser';
 
+import opts from '../cli/index';
+
 export default {
   parse: source =>
     parser.parse(source, {
-      plugins: ['typescript', 'jsx', 'classProperties', 'decorators-legacy'],
+      plugins: [
+        'classProperties',
+        'jsx',
+        ...((opts.parser && opts.parser.plugins) || [
+          'typescript',
+          'decorators-legacy',
+        ]),
+      ],
       sourceType: 'unambiguous',
       tokens: true,
+      ranges: true,
     }),
 };
