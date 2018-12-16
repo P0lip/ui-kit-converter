@@ -30,13 +30,15 @@ export const collectAttributes = ({ attributes }) => {
   return nodes;
 };
 
+const formatClassName = className => `.${className}`;
+
 export function getClassNames(attributesMap) {
   const node = attributesMap.get('className');
 
   if (node === void 0) return null;
 
-  if (node.value.type === 'Literal') {
-    return node.value.value.split(/\s+/);
+  if (node.value.type === 'StringLiteral') {
+    return node.value.value.split(/\s+/).map(formatClassName);
   }
 
   if (
@@ -56,7 +58,7 @@ export function getClassNames(attributesMap) {
     return callExpression.arguments
       .filter(arg => arg.type === 'StringLiteral')
       .flatMap(classes => classes.value.split(/\s+/))
-      .map(name => `.${name}`);
+      .map(formatClassName);
   }
 
   return null;
